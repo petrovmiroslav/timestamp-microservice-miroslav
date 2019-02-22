@@ -23,7 +23,37 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+/****************/
 
+function echoServer(req, res) {
+  let result;
+  let isInvalid;
+  const date_string = req.params.date_string;
+  console.log(new Date(date_string));
+  if(req.params.date_string==undefined) {
+    result = new Date();
+     } else {
+         if(new Date(date_string)!="Invalid Date") {
+           result = new Date(date_string);
+         } else {
+            if(Number.isNaN(Number(date_string))) {isInvalid = true;}
+           result = new Date(Number(date_string));
+         }
+       }
+  if(isInvalid) {res.json({"error" : "Invalid Date" })}
+  else {
+    res.json({"unix": result.getTime(), "utc" : result.toUTCString() });
+  }
+}
+app.route("/api/timestamp/:date_string?").get(echoServer);
+
+
+
+
+
+
+
+/****************/
 
 
 // listen for requests :)
